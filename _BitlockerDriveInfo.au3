@@ -57,8 +57,8 @@ Func _BitlockerDriveInfo($sDrive = "", $sComputer = @ComputerName, $bDebug = Fal
     If @error Then Return SetError(1, @error, 0)
 
     If $sDrive <> "" Then
-        If Not FileExists($sDrive & "\") Then Return SetError(2, 1, 0)
-        If Not (DriveGetType($sDrive) = "Fixed") And Not (DriveGetType($sDrive) = "Removable") Then Return SetError(2, 2, 0)
+        If Not _WMIPropertyValue("DeviceID", "Win32_LogicalDisk", "WHERE DeviceID='" & $sDrive & "'", Default, $sComputer) Then Return SetError(2, 1, 0)
+        If Not (_WMIPropertyValue("DriveType", "Win32_LogicalDisk", "WHERE DeviceID='" & $sDrive & "'", Default, $sComputer) = 3) And Not (_WMIPropertyValue("DriveType", "Win32_LogicalDisk", "WHERE DeviceID='" & $sDrive & "'", Default, $sComputer) = 2) Then Return SetError(2, 2, 0)
         $sDriveFilter = " WHERE DriveLetter='" & $sDrive & "'"
     EndIf
 
